@@ -379,18 +379,7 @@ figures/
 
 ---
 
-# 📚 Citation
 
-If you use this work in your research, please cite:
-
-```bibtex
-@article{chauhan2026,
-  title={Explainable Deep Learning Framework for Spatial Rainfall Prediction over India},
-  author={Ashutosh Chauhan},
-  journal={Under Review},
-  year={2026}
-}
-```
 
 ---
 
@@ -398,31 +387,14 @@ If you use this work in your research, please cite:
 
 **Ashutosh Chauhan**
 
-🎓 B.Tech Computer Science & Engineering (AI & ML)
+🎓 B.Tech Computer Science & Engineering (Cloud Computing)
 
 🏛️ SRM Institute of Science and Technology
 
-🔬 Summer Research Intern
-
-Centre of Excellence in Product Design and Smart Manufacturing (CEPDSM)
-
-Maulana Azad National Institute of Technology (MANIT), Bhopal
 
 ---
 
-# 📜 License
 
-This project is licensed under the **MIT License**.
-
----
-
-<div align="center">
-
-### ⭐ If you found this repository useful, please consider giving it a star!
-
-**Made with ❤️ using PyTorch for AI-driven Rainfall Prediction**
-
-</div>
 ---
 
 # 📋 Notebook Summary
@@ -542,16 +514,4 @@ SRM Institute of Science and Technology
 
 ---
 
-<div align="center">
 
-## ⭐ Support the Project
-
-If you found this project helpful, please consider giving it a **⭐ Star** on GitHub.
-
-It helps others discover the project and supports future research.
-
----
-
-**Made with ❤️ using PyTorch**
-
-</div>
