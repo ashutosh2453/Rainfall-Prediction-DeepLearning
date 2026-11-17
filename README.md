@@ -367,6 +367,65 @@ figures/
 
 ---
 
+# ✅ Evaluation & Reproducibility
+
+## Beat the persistence baseline
+
+Next-day rainfall maps are highly autocorrelated, so a model must be compared against **persistence**: forecasting tomorrow as today's map. R² alone can look good while the model is worse than persistence.
+
+```python
+from utils.metrics import evaluate_model, rain_skill_scores, skill_vs_persistence
+from utils.trainer import predict
+
+y_true, y_pred = predict(model, test_loader, device)
+print(skill_vs_persistence(y_true, y_pred, X_test))           # skill_score > 0 means better than persistence
+print(rain_skill_scores(y_true, y_pred, threshold=rain_thr))  # POD, FAR, CSI, frequency bias
+print(evaluate_model(y_true, y_pred, mask=land_mask))         # MAE/RMSE/R² on land cells only
+```
+
+## Training loop with best-weight restoration
+
+`EarlyStopping` now keeps a copy of the best weights. Previously, training ended with the weights from the last, worse epochs. `fit()` wraps the loop with gradient clipping (useful for the LSTMs) and optional LR scheduling:
+
+```python
+from utils.early_stopping import EarlyStopping
+from utils.trainer import fit
+
+es = EarlyStopping(patience=5)
+history = fit(model, train_loader, val_loader, optimizer, criterion, device, epochs=50,
+              early_stopping=es, scheduler=torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer))
+```
+
+The existing notebooks keep working unchanged: `EarlyStopping(...)(val_loss)`, `.early_stop`, `.best_loss` and the zero-argument model constructors behave as before. `CNNBiLSTM(height, width)` and `CNNBiLSTMAttention(height, width)` now also accept other grid sizes.
+
+## Tests
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install numpy scikit-learn pytest
+pytest -q
+```
+
+15 CPU-only tests on small synthetic grids cover:
+- the model output shapes and attention normalisation
+- early stopping and best-weight restoration, including divergence
+- sample-weighted losses
+- POD/FAR/CSI and the persistence baseline
+- an end-to-end check that a trained model learns drifting rain and **beats persistence**
+
+GitHub Actions runs them on every push.
+
+## Changelog
+
+- **2026-11-18**:
+  - `EarlyStopping` restores the best weights and stops on NaN loss.
+  - Losses are averaged over samples instead of batches.
+  - Added `fit()`, `predict()`, gradient clipping, persistence-baseline skill, rain/no-rain skill scores, and land masks in the metrics.
+  - The models accept any grid size.
+  - Added tests and CI.
+
+---
+
 # 🔬 Future Work
 
 - Integrate Minimum and Maximum Temperature
