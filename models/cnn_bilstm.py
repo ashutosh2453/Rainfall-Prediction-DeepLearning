@@ -13,8 +13,9 @@ class CNNBiLSTM(nn.Module):
         (Batch, 1, 129, 135)
     """
 
-    def __init__(self):
+    def __init__(self, height=129, width=135):
         super(CNNBiLSTM, self).__init__()
+        self.height, self.width = height, width
 
         # =====================================================
         # CNN Feature Extractor
@@ -79,7 +80,7 @@ class CNNBiLSTM(nn.Module):
 
             nn.Linear(
                 512,
-                129 * 135
+                height * width
             )
         )
 
@@ -125,11 +126,6 @@ class CNNBiLSTM(nn.Module):
 
         prediction = self.regressor(last_output)
 
-        prediction = prediction.view(
-            batch_size,
-            1,
-            129,
-            135
-        )
+        prediction = prediction.view(batch_size, 1, self.height, self.width)
 
         return prediction

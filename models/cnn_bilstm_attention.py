@@ -45,9 +45,10 @@ class CNNBiLSTMAttention(nn.Module):
         (Batch, 1, 129, 135)
     """
 
-    def __init__(self):
+    def __init__(self, height=129, width=135):
 
         super().__init__()
+        self.height, self.width = height, width
 
         # ---------------------------------------------------
         # CNN Encoder
@@ -133,7 +134,7 @@ class CNNBiLSTMAttention(nn.Module):
 
             nn.Linear(
                 512,
-                129 * 135
+                height * width
             )
 
         )
@@ -190,16 +191,6 @@ class CNNBiLSTMAttention(nn.Module):
 
         prediction = self.fc(context)
 
-        prediction = prediction.view(
-
-            batch_size,
-
-            1,
-
-            129,
-
-            135
-
-        )
+        prediction = prediction.view(batch_size, 1, self.height, self.width)
 
         return prediction
